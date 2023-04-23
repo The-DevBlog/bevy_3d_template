@@ -5,24 +5,32 @@ pub fn setup_world(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
 ) {
-    let floor = PbrBundle {
-        mesh: meshes.add(Mesh::from(shape::Plane {
-            size: 5.0,
-            ..default()
-        })),
-        material: materials.add(Color::BLUE.into()),
-        ..default()
-    };
-
-    let light = PointLightBundle {
-        point_light: PointLight {
-            intensity: 5000.0,
-            shadows_enabled: true,
+    let floor = (
+        PbrBundle {
+            mesh: meshes.add(Mesh::from(shape::Plane {
+                size: 50.0,
+                ..default()
+            })),
+            material: materials.add(Color::DARK_GREEN.into()),
             ..default()
         },
-        transform: Transform::from_xyz(0.0, 5.0, 0.0),
-        ..default()
-    };
+        Name::new("Ground"),
+    );
+
+    let light = (
+        DirectionalLightBundle {
+            directional_light: DirectionalLight {
+                shadows_enabled: false,
+                ..default()
+            },
+            transform: Transform {
+                rotation: Quat::from_rotation_x(4.0),
+                ..default()
+            },
+            ..default()
+        },
+        Name::new("Light"),
+    );
 
     cmds.spawn(floor);
     cmds.spawn(light);
